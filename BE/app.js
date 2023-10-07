@@ -43,6 +43,10 @@ const fee_collection = require("./controllers/feeCollection.controller");
 app.use("/fee_collection", fee_collection);
 const expense = require("./controllers/expense.controller");
 app.use("/expense", expense);
+const room = require("./controllers/room.controller");
+app.use("/room", room);
+const other = require("./controllers/other.controller");
+app.use("/other", other);
 
 app.listen(port, () => {
   console.log(`Example ${port}`);

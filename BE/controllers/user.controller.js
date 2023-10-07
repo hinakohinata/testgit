@@ -64,6 +64,7 @@ app.post('/getAllByRole/:role', (req, res) => {
     res.json(result);
   })
 });
+
 app.post('/search/:name', (req, res) => {
   let name='';
   if(req.params.name.length>0)
@@ -75,7 +76,6 @@ app.post('/search/:name', (req, res) => {
     res.json(result);
   })
 });
-
 
 app.post('/updateInfAccById/:userId', (req, res) => {
   const user_id = req.params.userId;
@@ -107,6 +107,7 @@ app.post('/updateInfAccById/:userId', (req, res) => {
   });
 
 });
+
 app.put('/disableAccById/:userId', (req, res) => {
   const user_id = req.params.userId;
   const sql = `
@@ -181,6 +182,32 @@ app.post('/', (req, res) => {
 })
 
 
+app.get('/getforAddAsm1to6', (req, res) => {
+  const sql = "SELECT u.user_id,u.name FROM user u "+
+  "LEFT JOIN assignment a ON u.user_id = a.user_id "+
+  "WHERE u.status = 1  AND a.user_id IS NULL "+
+  "AND u.position_id BETWEEN 1 AND 6;";
+  connection.query(sql, (error, result) => {
+      if (error)
+          res.status(500).send(error);
+      else {
+          res.json(result);
+      }
+  })
+})
+app.get('/getforAddAsm7', (req, res) => {
+  const sql = "SELECT u.user_id,u.name FROM user u "+
+  "LEFT JOIN assignment a ON u.user_id = a.user_id "+
+  "WHERE u.status = 1  AND a.user_id IS NULL "+
+  "AND u.position_id = 7;";
+  connection.query(sql, (error, result) => {
+      if (error)
+          res.status(500).send(error);
+      else {
+          res.json(result);
+      }
+  })
+})
 
 
 

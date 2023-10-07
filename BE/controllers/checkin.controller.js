@@ -27,29 +27,52 @@ app.post('/getByDate', (req, res) => {
     const date = req.body.date;
     const sql = 'SELECT * FROM checkin where date like ?';
     connection.query(sql, ["%" + date + "%"], function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
+
 app.post('/setOff', (req, res) => {
-    const { id, reason } = req.body.data;
-    if (reason.length ==0) {
+    const { id, reason } = req.body;
+    console.log(id)
+    console.log(reason.length == 0, reason)
+    if (reason.length == 0) {
         const sql = 'UPDATE checkin set status =0 where id= ?';
-        connection.query(sql, [ id], function (error, result) {
-            if (error)
+        connection.query(sql, [id], function (error, result) {
+            if (error) {
+                console.log(error);
                 res.status(500).send(error);
-            res.json(result);
+            } else
+                res.json(result);
         })
-    }else{
+    } else {
         const sql = 'UPDATE checkin set status =2,reason=? where id= ?';
         connection.query(sql, [reason, id], function (error, result) {
-            if (error)
+            if (error) {
+                console.log(error);
                 res.status(500).send(error);
-            res.json(result);
+            } else
+                res.json(result);
         })
     }
 })
+
+app.post('/setOn/:id', (req, res) => {
+    const id = req.params.id;
+    console.log("id",id)
+    const sql = 'UPDATE checkin set status = 1, reason=null where id= ?';
+    connection.query(sql, [id], function (error, result) {
+        if (error) {
+            console.log(error);
+            res.status(500).send(error);
+        } else
+            res.json(result);
+    })
+})
+
 app.post('/createByDate', (req, res) => {
     const dataArray = req.body.data;
     const now = new Date();
@@ -64,13 +87,13 @@ app.post('/createByDate', (req, res) => {
     if (now.getDate() >= 10) {
         date = `${now.getDate() + 1}`;
     } else {
-        date = `0${now.getDate() + 1}`;
+        date = `0${now.getDate()}`;
     }
     const today = `${year}-${month}-${date}`;
 
     // Chuẩn bị dữ liệu cho batch insert
     const values = dataArray.map(dataItem => [today, dataItem.user_id, 1]);
-    const sql = 'ALTER TABLE `checkin` ADD UNIQUE `unique_index`(`user_id`, `date`); ' +
+    const sql =
         'INSERT INTO `checkin`(`date`,`user_id`,`status`) VALUES ?';
 
     connection.query(sql, [values], function (error, result) {

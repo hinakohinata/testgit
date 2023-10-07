@@ -6,18 +6,22 @@ app.get('/', (req, res) => {
     const sql = "SELECT fc.*,ft.name ftname  FROM `expense` fc "+
     'INNER JOIN fee_type ft ON ft.id = fc.type ';
     con.query(sql, function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
 app.get('/search/:text', (req, res) => {
     const text =req.params.text;
     const sql = "SELECT * FROM `expense` WHERE (`name` like ?) ";
     con.query(sql,  ['%' + text + '%'],function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
 
@@ -65,9 +69,11 @@ app.delete('/:id', (req, res) => {
 
     const sql = "DELETE FROM `expense` WHERE id = ?;";
     con.query(sql, [id], function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
 
@@ -76,9 +82,11 @@ app.get('/:id', (req, res) => {
 
     const sql = "SELECT * FROM `expense` WHERE id = ?;";
     con.query(sql, [id], function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
 

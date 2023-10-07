@@ -5,18 +5,22 @@ const app = express();
 app.get('/', (req, res) => {
     const sql = "SELECT * FROM `positions`";
     con.query(sql, function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
 app.get('/search/:text', (req, res) => {
     const text =req.params.text;
     const sql = "SELECT * FROM `positions` WHERE (`name` like ?) ";
     con.query(sql,  ['%' + text + '%'],function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
 
@@ -64,9 +68,11 @@ app.delete('/:id', (req, res) => {
 
     const sql = "DELETE FROM `positions` WHERE id = ?;";
     con.query(sql, [id], function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
 
@@ -75,9 +81,11 @@ app.get('/:id', (req, res) => {
 
     const sql = "SELECT * FROM `positions` WHERE id = ?;";
     con.query(sql, [id], function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
 

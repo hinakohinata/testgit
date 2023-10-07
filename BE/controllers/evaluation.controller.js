@@ -27,9 +27,11 @@ app.post('/getByDate', (req, res) => {
     'INNER JOIN user u                  ON u.user_id = a.teacher_id '+
     'where a.evaluation_date like ?';
     connection.query(sql, [date], function (error, result) {
-        if (error)
+        if (error) {
+            console.log(error);
             res.status(500).send(error);
-        res.json(result);
+        } else
+            res.json(result);
     })
 })
 module.exports = app
