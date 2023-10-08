@@ -1,14 +1,13 @@
-//connect database
-const mysql = require('mysql2')
+const mysql = require('mysql2');
+
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '123456',
-    database: 'new2',
-    port: 3306
-})
-connection.connect(function (arr) {
-    if (arr) throw arr;
-    console.log('connected db');
-})
-module.exports = connection
+  host: 'bckjd2tbaw1o50x7macp-mysql.services.clever-cloud.com',
+  user: 'uzwzzg9hkdjb9jvy',
+  password: '7o9B3C7i6iqbUUbE7Pa9',
+  database: 'bckjd2tbaw1o50x7macp'
+});
+
+connection.connect(function (err) {
+  if (err) throw err;
+  console.log('Connected to database!');
+});
