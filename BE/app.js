@@ -1,9 +1,11 @@
+require('dotenv').config();
+
 const express = require("express");
 
 const cors = require("cors");
 const app = express();
 var bodyParser = require("body-parser");
-const port = 5000;
+const port = process.env.POST;
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -12,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 var corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:3000/*","http:*"],
+  origin: ["http://localhost:3000", "http://localhost:3000/*"],
 };
 app.use(cors(corsOptions));
 
@@ -47,6 +49,8 @@ const room = require("./controllers/room.controller");
 app.use("/room", room);
 const other = require("./controllers/other.controller");
 app.use("/other", other);
+const backupUpload = require("./controllers/backupUpload.controller");
+app.use("/backupUpload", backupUpload);
 
 app.listen(port, () => {
   console.log(`Example ${port}`);
