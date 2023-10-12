@@ -2,13 +2,13 @@
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { fetch, getRole, getUsername, selectIsLoggedIn } from '@/redux/slices/userSlice';
+import { getRole, getUsername, selectIsLoggedIn } from '@/redux/slices/userSlice';
 import { useAppDispatch } from '@/redux/hook';
 
 
 export const checkRole = (role) =>{
     const dispatch = useAppDispatch()
-  dispatch(fetch())
+  // dispatch(fetch())
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const getRoleUser = useSelector(getRole);
   const getUser = useSelector(getUsername);

@@ -4,6 +4,7 @@ import axios from "axios";
 import { RootState, store } from "../store";
 import { toast } from 'react-toastify';
 import { Position } from "@/models/position";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface feeTypeState {
   feeTypeList: Position[];
@@ -17,14 +18,14 @@ const initialState: feeTypeState = {
   selectedPosition: null
 };
 export const getFeeTypeListAsync = createAsyncThunk("fee_type/fetchpositions", async () => {
-  const response = await axios.get<[]>("http://localhost:5000/fee_type");
+  const response = await axios.get<[]>(API_URL+"fee_type");
   return response.data;
 });
 
 export const createPositionAsync = createAsyncThunk(
   'fee_type/create',
   async (positionData: any) => {
-    const response = await axios.post<any>('http://localhost:5000/fee_type', positionData);
+    const response = await axios.post<any>(API_URL+'fee_type', positionData);
     console.log(response)
     return response.data.name;
   }
@@ -33,7 +34,7 @@ export const createPositionAsync = createAsyncThunk(
 export const updatePositionAsync = createAsyncThunk(
   'fee_type/update',
   async (updatedPosition: any) => {
-    const response = await axios.put<any>(`http://localhost:5000/fee_type/${updatedPosition.id}`, updatedPosition);
+    const response = await axios.put<any>(`${API_URL}fee_type/${updatedPosition.id}`, updatedPosition);
     return updatedPosition;
   }
 );
@@ -41,20 +42,20 @@ export const updatePositionAsync = createAsyncThunk(
 export const deletePositionAsync = createAsyncThunk(
   'fee_type/delete',
   async (positionId: number) => {
-    await axios.delete(`http://localhost:5000/fee_type/${positionId}`);
+    await axios.delete(`${API_URL}fee_type/${positionId}`);
     return positionId;
   }
 )
 export const searchPositionAsync = createAsyncThunk(
   'fee_type/search',
   async (text: string) => {
-    const response = await axios.get<[]>(`http://localhost:5000/fee_type/search/${text}`);
+    const response = await axios.get<[]>(`${API_URL}fee_type/search/${text}`);
     return response.data;
   }
 );
 
 export const getTypeForAddFeeCollectionAsync = createAsyncThunk("other/getTypeForAddFeeCollection", async () => {
-  const response = await axios.get<[]>(`http://localhost:5000/fee_type/getTypeForAddFeeCollection`);
+  const response = await axios.get<[]>(`${API_URL}fee_type/getTypeForAddFeeCollection`);
   return response.data;
 });
 

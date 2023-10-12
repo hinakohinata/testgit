@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export interface assignmentMan {
     originList: any[];
     assignmentManList: any[];
@@ -16,20 +17,20 @@ const initialState: assignmentMan = {
 };
 
 export const getAssignmentManListAsync = createAsyncThunk('asm/get-list', async () => {
-    const response = await axios.get<[]>('http://localhost:5000/assignment/getByAsmTable');
+    const response = await axios.get<[]>(API_URL+'assignment/getByAsmTable');
     return response.data
 }
 );
 
 export const getIn4ForcheckinAsync = createAsyncThunk("checkin/getIn4Forcheckin", async () => {
-    const response = await axios.get<[]>(" http://localhost:5000/checkin/getIn4Forcheckin");
+    const response = await axios.get<[]>(API_URL+"checkin/getIn4Forcheckin");
     return response.data;
 });
 
 export const createAsmAsync = createAsyncThunk(
     'asm/create',
     async (data: any) => {
-      const response = await axios.post<any>('http://localhost:5000/assignment', data);
+      const response = await axios.post<any>(API_URL+'assignment', data);
       console.log(response)
       return response.data.name;
     }
@@ -38,7 +39,7 @@ export const createAsmAsync = createAsyncThunk(
   export const setOffAsmAsync = createAsyncThunk(
     'asm/setOffAsm',
     async (data:any) => {
-      const response = await axios.post<any>(`http://localhost:5000/assignment/setOff`, data);
+      const response = await axios.post<any>(`${API_URL}assignment/setOff`, data);
       return response.data;
     }
   );
@@ -46,7 +47,7 @@ export const createAsmAsync = createAsyncThunk(
   export const changeRoomAsmAsync = createAsyncThunk(
     'asm/changeRoomAsm',
     async (data:any) => {
-      const response = await axios.post<any>(`http://localhost:5000/assignment/changeRoom`, data);
+      const response = await axios.post<any>(`${API_URL}assignment/changeRoom`, data);
       return response.data;
     }
   );

@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export interface accountState {
     originList: any[];
     accList: any[];
@@ -18,25 +19,25 @@ const initialState: accountState = {
 export const getaccListAsync = createAsyncThunk(
     'Acc/get-Acc-list',
     async () => {
-        const response = await axios.post<[]>('http://localhost:5000/user/getAll');
+        const response = await axios.post<[]>(API_URL+'user/getAll');
         return response.data
     }
 );
 export const getaccListByRoleAsync = createAsyncThunk(
     'Acc/get-Acc-list-by-Role',
     async (role: any) => {
-        const response = await axios.post<[]>(`http://localhost:5000/user/getAllByRole/${role}`);
+        const response = await axios.post<[]>(`${API_URL}user/getAllByRole/${role}`);
         return response.data
     }
 );
 
 export const getACCforAddAsm1to6ListAsync = createAsyncThunk('other/get-list', async () => {
-    const response = await axios.get<[]>('http://localhost:5000/other/getforAddAsm1to6');
+    const response = await axios.get<[]>(API_URL+'other/getforAddAsm1to6');
     return response.data
 });
 
 export const getACCforAddAsm7ListAsync = createAsyncThunk('other/get-list', async () => {
-    const response = await axios.get<[]>('http://localhost:5000/other/getforAddAsm7');
+    const response = await axios.get<[]>(API_URL+'other/getforAddAsm7');
     return response.data
 });
 
@@ -45,7 +46,7 @@ export const createAccAsync = createAsyncThunk(
     'acc/create-ACC',
     async (accData: any) => {
         console.log(accData)
-        const response = await axios.post<any>('http://localhost:5000/user', accData);
+        const response = await axios.post<any>(API_URL+'user', accData);
         console.log(response)
         return response.data;
     }
@@ -53,21 +54,21 @@ export const createAccAsync = createAsyncThunk(
 export const updateInfAccAsync = createAsyncThunk(
     'user/update1',
     async (updatedAcc: any) => {
-        const response = await axios.post<any>(`http://localhost:5000/user/updateInfAccById/${updatedAcc.user_id}`, updatedAcc);
+        const response = await axios.post<any>(`${API_URL}user/updateInfAccById/${updatedAcc.user_id}`, updatedAcc);
         return updatedAcc;
     }
 );
 export const disableAccAsync = createAsyncThunk(
     'user/disable',
     async (userID: any) => {
-        const response = await axios.put<any>(`http://localhost:5000/user/disableAccById/${userID}`);
+        const response = await axios.put<any>(`${API_URL}user/disableAccById/${userID}`);
         return userID;
     }
 );
 export const searchAccrAsync = createAsyncThunk(
     'user/search',
     async (text: string) => {
-        const response = await axios.post<[]>(`http://localhost:5000/user/search/${text}`);
+        const response = await axios.post<[]>(`${API_URL}user/search/${text}`);
         return response.data
     }
 )

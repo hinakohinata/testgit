@@ -12,9 +12,9 @@ import {
 } from "@mui/material";
 
 import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
-import { useAppDispatch } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { useRouter } from "next/navigation";
-import { logout } from "@/redux/slices/userSlice";
+import { getUsername, logout } from "@/redux/slices/userSlice";
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ const Profile = () => {
   const handleClose2 = () => {
     setAnchorEl2(null);
   };
-
+const username=useAppSelector(getUsername)
   return (
     <Box>
       <IconButton
@@ -49,7 +49,7 @@ const Profile = () => {
             width: 35,
             height: 35,
           }}
-        />
+        />{username}
       </IconButton>
       {/* ------------------------------------------- */}
       {/* Message Dropdown */}
@@ -88,7 +88,7 @@ const Profile = () => {
         </MenuItem>
         <Box mt={1} py={1} px={2}>
           <Button
-            href="#"
+            href="/"
             variant="outlined"
             color="primary"
             component={Link}

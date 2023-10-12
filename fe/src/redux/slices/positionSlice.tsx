@@ -4,6 +4,7 @@ import axios from "axios";
 import { RootState, store } from "../store";
 import { toast } from 'react-toastify';
 import { Position } from "@/models/position";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface bookState {
   positionList: Position[];
@@ -17,14 +18,14 @@ const initialState: bookState = {
   selectedPosition: null
 };
 export const getPositonListAsync = createAsyncThunk("positions/fetchpositions", async () => {
-  const response = await axios.get<[]>("http://localhost:5000/positions");
+  const response = await axios.get<[]>(API_URL+"positions");
   return response.data;
 });
 
 export const createPositionAsync = createAsyncThunk(
   'positions/create',
   async (positionData: any) => {
-    const response = await axios.post<any>('http://localhost:5000/positions', positionData);
+    const response = await axios.post<any>(API_URL+'positions', positionData);
     console.log(response)
     return response.data.name;
   }
@@ -33,7 +34,7 @@ export const createPositionAsync = createAsyncThunk(
 export const updatePositionAsync = createAsyncThunk(
   'positions/update',
   async (updatedPosition: any) => {
-    const response = await axios.put<any>(`http://localhost:5000/positions/${updatedPosition.id}`, updatedPosition);
+    const response = await axios.put<any>(`${API_URL}positions/${updatedPosition.id}`, updatedPosition);
     return updatedPosition;
   }
 );
@@ -41,14 +42,14 @@ export const updatePositionAsync = createAsyncThunk(
 export const deletePositionAsync = createAsyncThunk(
   'positions/delete',
   async (positionId: number) => {
-    await axios.delete(`http://localhost:5000/positions/${positionId}`);
+    await axios.delete(`${API_URL}positions/${positionId}`);
     return positionId;
   }
 )
 export const searchPositionAsync = createAsyncThunk(
   'positions/search',
   async (text: string) => {
-    const response = await axios.get<[]>(`http://localhost:5000/positions/search/${text}`);
+    const response = await axios.get<[]>(`${API_URL}positions/search/${text}`);
     return response.data;
   }
 );

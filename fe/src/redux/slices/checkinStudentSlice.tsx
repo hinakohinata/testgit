@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState, store } from "../store";
 import { toast } from 'react-toastify';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface attendanceState {
   attendanceList: any[];
@@ -17,12 +18,12 @@ const initialState: attendanceState = {
 };
 
 export const getattendanceListAsync = createAsyncThunk("attendance/fetchcheckin", async () => {
-  const response = await axios.get<[]>("http://localhost:5000/attendance");
+  const response = await axios.get<[]>(API_URL+"attendance");
   return response.data;
 });
 
 export const getAttendanceBydateAsync = createAsyncThunk( 'attendance/getCheckinByDate',async (date: any) => {
-    const response = await axios.post<any>('http://localhost:5000/attendance/getByDate', {date});
+    const response = await axios.post<any>(API_URL+'attendance/getByDate', {date});
     console.log("list",date,response.data)
     return response.data;
   }
@@ -31,7 +32,7 @@ export const getAttendanceBydateAsync = createAsyncThunk( 'attendance/getCheckin
 export const createAttendanceBydateAsync = createAsyncThunk(
   'attendance/create',
   async (positionData: any) => {
-    const response = await axios.post<any>('http://localhost:5000/attendance/createByDate', positionData);
+    const response = await axios.post<any>(API_URL+'attendance/createByDate', positionData);
     console.log(response)
     return response.data.name;
   } 
@@ -40,7 +41,7 @@ export const createAttendanceBydateAsync = createAsyncThunk(
 export const updatePositionAsync = createAsyncThunk(
   'attendance/update',
   async (updatedPosition: any) => {
-    const response = await axios.put<any>(`http://localhost:5000/attendance/${updatedPosition.id}`, updatedPosition);
+    const response = await axios.put<any>(`${API_URL}attendance/${updatedPosition.id}`, updatedPosition);
     return updatedPosition;
   }
 );
@@ -48,14 +49,14 @@ export const updatePositionAsync = createAsyncThunk(
 export const deletePositionAsync = createAsyncThunk(
   'attendance/delete',
   async (positionId: number) => {
-    await axios.delete(`http://localhost:5000/attendance/${positionId}`);
+    await axios.delete(`${API_URL}attendance/${positionId}`);
     return positionId;
   }
 )
 export const searchPositionAsync = createAsyncThunk(
   'attendance/search',
   async (text: string) => {
-    const response = await axios.get<[]>(`http://localhost:5000/attendance/search/${text}`);
+    const response = await axios.get<[]>(`${API_URL}attendance/search/${text}`);
     return response.data;
   }
 );

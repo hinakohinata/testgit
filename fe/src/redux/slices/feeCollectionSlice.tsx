@@ -4,6 +4,7 @@ import axios from "axios";
 import { RootState, store } from "../store";
 import { toast } from 'react-toastify';
 import { Position } from "@/models/position";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface feeCollectionState {
   feeCollectionList: Position[];
@@ -17,7 +18,7 @@ const initialState: feeCollectionState = {
   selectedPosition: null
 };
 export const getFeeCollectionListAsync = createAsyncThunk("fee_collection/fetchpositions", async () => {
-  const response = await axios.get<[]>("http://localhost:5000/fee_collection");
+  const response = await axios.get<[]>(API_URL+"fee_collection");
   return response.data;
 });
 
@@ -26,7 +27,7 @@ export const getFeeCollectionListAsync = createAsyncThunk("fee_collection/fetchp
 export const searchPositionAsync = createAsyncThunk(
   'fee_collection/search',
   async (text: string) => {
-    const response = await axios.get<[]>(`http://localhost:5000/fee_collection/search/${text}`);
+    const response = await axios.get<[]>(`${API_URL}fee_collection/search/${text}`);
     return response.data;
   }
 );
@@ -34,7 +35,7 @@ export const searchPositionAsync = createAsyncThunk(
 export const createFeeCollectionListAsync = createAsyncThunk(
   "fee_collection/fetchCreateCheckin",
   async (data: any) => {
-    const response = await axios.post<any>(`http://localhost:5000/fee_collection/createByDate`, { data });
+    const response = await axios.post<any>(`${API_URL}fee_collection/createByDate`, { data });
     console.log("list", response);
     return response.data;
   }
@@ -44,7 +45,7 @@ export const createFeeCollectionListAsync = createAsyncThunk(
 export const setOffFeeCollectionAsync = createAsyncThunk(
   'fee_collection/setOffFeeCollection',
   async (data: any) => {
-    const response = await axios.post<any>(`http://localhost:5000/fee_collection/setOff/${data}`);
+    const response = await axios.post<any>(`${API_URL}fee_collection/setOff/${data}`);
     return response.data;
   }
 );
@@ -53,7 +54,7 @@ export const setOffFeeCollectionAsync = createAsyncThunk(
 export const setOnFeeCollectionAsync = createAsyncThunk(
   'fee_collection/setOnFeeCollection',
   async (data: any) => {
-    const response = await axios.post<any>(`http://localhost:5000/fee_collection/setOn/${data}`);
+    const response = await axios.post<any>(`${API_URL}fee_collection/setOn/${data}`);
     return response.data;
   }
 );
@@ -61,7 +62,7 @@ export const setOnFeeCollectionAsync = createAsyncThunk(
 export const deleteFeeCollectionAsync = createAsyncThunk(
   'fee_collection/delete',
   async (id: number) => {
-    await axios.delete(`http://localhost:5000/fee_collection/${id}`);
+    await axios.delete(`${API_URL}fee_collection/${id}`);
     return id;
   }
 )

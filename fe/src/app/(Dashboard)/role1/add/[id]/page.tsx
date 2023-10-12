@@ -160,7 +160,7 @@ const AddAcc = ({ params }: { params: { id: number } }) => {
                         </div>
                         <div className='d=flex flex-row mt-5'>
                             <button type="submit" className="btn btn-primary me-4">+ Thêm</button>
-                            <Link href={'/role1'} shallow className="btn btn-secondary"><i className="bi bi-backspace me-2"></i> Quay lại</Link>
+                            <Link href={'/'} shallow className="btn btn-secondary"><i className="bi bi-backspace me-2"></i> Quay lại</Link>
                         </div>
                     </form>
                     <div className="modal fade shadow" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">

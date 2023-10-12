@@ -4,51 +4,53 @@ import axios from "axios";
 import { RootState, store } from "../store";
 import { toast } from 'react-toastify';
 import { Position } from "@/models/position";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface expenseState {
-  expenseList: Position[];
-  originList: Position[];
-  selectedPosition: any | null
+  expenseList: any[];
+  originList: any[];
+  typeName: Record<number, string>;
+  selectedExpense: any | null
 }
 
 const initialState: expenseState = {
   expenseList: [],
   originList: [],
-  selectedPosition: null
+  typeName: {},
+  selectedExpense: null
 };
 export const getExpenseListAsync = createAsyncThunk("expense/fetchpositions", async () => {
-  const response = await axios.get<[]>("http://localhost:5000/expense");
+  const response = await axios.get<[]>(API_URL+"expense/getForTable");
   return response.data;
 });
 
-export const createPositionAsync = createAsyncThunk(
+export const createExpenseAsync = createAsyncThunk(
   'expense/create',
-  async (positionData: any) => {
-    const response = await axios.post<any>('http://localhost:5000/expense', positionData);
+  async (expenseData: any) => {
+    const response = await axios.post<any>(API_URL+'expense', expenseData);
     console.log(response)
     return response.data.name;
   }
 );
-
-export const updatePositionAsync = createAsyncThunk(
-  'expense/update',
-  async (updatedPosition: any) => {
-    const response = await axios.put<any>(`http://localhost:5000/expense/${updatedPosition.id}`, updatedPosition);
-    return updatedPosition;
+export const getTypeNameAsync = createAsyncThunk(
+  'expense/get-typeName',
+  async () => {
+    const response = await axios.get<[]>(API_URL+'expense/typeName');
+    return response.data;
   }
 );
-
-export const deletePositionAsync = createAsyncThunk(
-  'expense/delete',
-  async (positionId: number) => {
-    await axios.delete(`http://localhost:5000/expense/${positionId}`);
-    return positionId;
+export const updateExpenseAsync = createAsyncThunk(
+  'expense/update',
+  async (updatedExpense: any) => {
+    const response = await axios.put<any>(`${API_URL}expense/${updatedExpense.id}`, updatedExpense);
+    return updatedExpense;
   }
-)
-export const searchPositionAsync = createAsyncThunk(
+);
+export const searchExpenseAsync = createAsyncThunk(
   'expense/search',
-  async (text: string) => {
-    const response = await axios.get<[]>(`http://localhost:5000/expense/search/${text}`);
+  async (date: string) => {
+    const response = await axios.get<[]>(`${API_URL}expense/date/${date}`);
+    console.log("Redux Search Results:", response.data);
     return response.data;
   }
 );
@@ -61,44 +63,20 @@ export const searchPositionAsync = createAsyncThunk(
 
 
 
-export const booksSlice = createSlice({
-  name: "positions-state",
+
+export const expenseSlice = createSlice({
+  name: "expense-state",
   initialState,
   reducers: {
 
-    addPosition: (state, action) => {
-      const newPosition: any = action.payload;
-      const originList: any = [...state.originList];
-      originList.push(newPosition);
-      state.expenseList = originList;
-      // thêm sản phẩm
-    },
-    removePosition: (state, action) => {
-      // xoá sản phẩm
-      const { id } = action.payload;
-      const originList: any = [...state.originList];
-      originList.filter((position: any) => position.id !== id);
-      state.expenseList = originList;
-    },
-    updatePosition: (state, action) => {
-      // cập nhật sản phẩmupdateProduct: (state, action) => {
-      const position = action.payload;
-      const originList: any = [...state.originList];
-
-      const index = originList.findIndex((p: any) => p.id === position.id);
-
-      originList[index] = position;
-      state.originList = originList;
-    },
-    resetexpenseList: (state) => {
-      const originList: any = [...state.originList];
-      state.expenseList = originList;
-    },
-    getPositionById(state, action) {
+    getExpenseById(state, action) {
       const tmp = state.expenseList.find(
         book => book.id == action.payload
       );
-      state.selectedPosition = tmp
+      state.selectedExpense = tmp
+    },
+    resetExpenseList: (state) => {
+      state.expenseList = [...state.originList];
     },
   },
   extraReducers: (builder) => {
@@ -106,31 +84,36 @@ export const booksSlice = createSlice({
       state.expenseList = action.payload;
       state.originList = action.payload;
     })
-      .addCase(createPositionAsync.fulfilled, (state, action) => {
-        toast.success("Đã thêm " + action.payload, {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      })
-      .addCase(updatePositionAsync.fulfilled, (state, action) => {
-        const index = state.expenseList.findIndex(item => item.id === action.payload.id);
-        state.expenseList[index] = action.payload;
-        toast.success("Đã cập nhật " + action.payload.id + ' - ' + action.payload.name, {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      })
-      .addCase(deletePositionAsync.fulfilled, (state, action) => {
-        state.expenseList = state.expenseList.filter(
-          item => item.id !== action.payload
-        );
-        toast.success(`Đã xóa chức vụ có id ${action.payload}`)
-      })
+    .addCase(createExpenseAsync.fulfilled, (state, action) => {
+      toast.success("Đã thêm thành công " , {
+        position: "top-right",
+        autoClose: 5000,
+      });
+    })
+    .addCase(updateExpenseAsync.fulfilled, (state, action) => {
+      const index = state.expenseList.findIndex(item => item.id === action.payload.id);
+      state.expenseList[index] = action.payload;
+      toast.success("Đã cập nhật " + action.payload.id , {
+        position: "top-right",
+        autoClose: 5000,
+      });
+    })
+    .addCase(getTypeNameAsync.fulfilled, (state, action) => {
+      action.payload.forEach((typeName: any) => {
+        if (typeName.id && typeName.name && typeName.id) {
+          state.typeName[typeName.id] = typeName.name;
+        }
+      });
+    })
+    .addCase(searchExpenseAsync.fulfilled, (state, action) => {
+      state.expenseList = action.payload;
+    })
+
   },
 });
-export const getExpenseList = (state: RootState) => state.expenseSlice.originList;
-export const { resetexpenseList,  getPositionById } =
-  booksSlice.actions;
+export const getExpenseList = (state: RootState) => state.expenseSlice.expenseList;
+export const { resetExpenseList, getExpenseById } = expenseSlice.actions;
 
-export const getPosition = (state: RootState) => state.expenseSlice.selectedPosition;
-export default booksSlice.reducer;
+
+export const getExpense = (state: RootState) => state.expenseSlice.selectedExpense;
+export default expenseSlice.reducer;

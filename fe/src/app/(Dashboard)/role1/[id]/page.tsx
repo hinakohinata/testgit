@@ -121,7 +121,6 @@ const UpdateAndDelAcc = ({ params }: { params: { id: number } }) => {
     //xóa
     const onDel = () => {
         dispatch(disableAccAsync(accId));
-        router.replace('/role1')
     }
     return (
         <div>

@@ -121,7 +121,7 @@ const UpdateAndDelAcc = ({ params }: { params: { id: number } }) => {
     //xóa
     const onDel = () => {
         dispatch(disableAccAsync(accId));
-        router.replace('/role1')
+        // router.replace('/role1')
     }
     return (
         <div>
@@ -278,7 +278,7 @@ const UpdateAndDelAcc = ({ params }: { params: { id: number } }) => {
                         onClick={() => setOpen(true)}>
                         Khóa tài khoản
                     </Button>
-                    <Link href={'/role1'} shallow className="btn btn-secondary"><i className="bi bi-backspace me-2"></i> Quay lại</Link>
+                    <Link href={'/'} shallow className="btn btn-secondary"><i className="bi bi-backspace me-2"></i> Quay lại</Link>
                 </div>
             </form>
             {/* <!-- Modal --> */}

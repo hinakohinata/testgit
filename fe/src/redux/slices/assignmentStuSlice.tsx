@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface assignmentStudent {
     originList: any[];
@@ -17,7 +18,7 @@ const initialState: assignmentStudent = {
 export const getAssignmentStuListAsync = createAsyncThunk(
     'assignmentStudent/get-list',
     async () => {
-        const response = await axios.get<[]>('http://localhost:5000/assignmentStudent/getByAsmTable');
+        const response = await axios.get<[]>(API_URL+'assignmentStudent/getByAsmTable');
         return response.data
     }
 );
@@ -25,7 +26,7 @@ export const getAssignmentStuListAsync = createAsyncThunk(
 export const createAsmStudentAsync = createAsyncThunk(
     'assignmentStudent/create',
     async (data: any) => {
-      const response = await axios.post<any>('http://localhost:5000/assignmentStudent', data);
+      const response = await axios.post<any>(API_URL+'assignmentStudent', data);
       console.log(response)
       return response.data.name;
     }
@@ -34,7 +35,7 @@ export const createAsmStudentAsync = createAsyncThunk(
   export const setOffAsmStudentAsync = createAsyncThunk(
     'assignmentStudent/setOffAsm',
     async (data:any) => {
-      const response = await axios.post<any>(`http://localhost:5000/assignmentStudent/setOff`, data);
+      const response = await axios.post<any>(`${API_URL}assignmentStudent/setOff`, data);
       return response.data;
     }
   );
@@ -42,7 +43,7 @@ export const createAsmStudentAsync = createAsyncThunk(
   export const changeRoomAsmStudentAsync = createAsyncThunk(
     'assignmentStudent/changeRoomAsm',
     async (data:any) => {
-      const response = await axios.post<any>(`http://localhost:5000/assignmentStudent/changeRoom`, data);
+      const response = await axios.post<any>(`${API_URL}assignmentStudent/changeRoom`, data);
       return response.data;
     }
   );

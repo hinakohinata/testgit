@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Define room state
 export interface RoomState {
@@ -19,14 +20,14 @@ const initialState: RoomState = {
 export const getRoomListAsync = createAsyncThunk(
     'room/get-room-list',
     async () => {
-        const response = await axios.get<[]>('http://localhost:5000/room');
+        const response = await axios.get<[]>(API_URL+'room');
         return response.data;
     }
 );
 export const getClassesAsync = createAsyncThunk(
     'room/get-classes',
     async () => {
-        const response = await axios.get<[]>('http://localhost:5000/classGroup');
+        const response = await axios.get<[]>(API_URL+'classGroup');
         return response.data;
     }
 );
@@ -36,7 +37,7 @@ export const createRoomAsync = createAsyncThunk(
     'room/create',
     async (roomData: any) => {
         console.log(roomData)
-        const response = await axios.post<any>('http://localhost:5000/room', roomData);
+        const response = await axios.post<any>(API_URL+'room', roomData);
         console.log(response)
         return response.data.name;
     }
@@ -46,7 +47,7 @@ export const createRoomAsync = createAsyncThunk(
 export const updateRoomAsync = createAsyncThunk(
     'room/update',
     async (updatedRoom: any) => {
-        const response = await axios.put<any>(`http://localhost:5000/room/${updatedRoom.room_id}`, updatedRoom);
+        const response = await axios.put<any>(`${API_URL}room/${updatedRoom.room_id}`, updatedRoom);
         return updatedRoom;
     }
 );

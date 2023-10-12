@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface accountState {
     originList: any[];
@@ -17,22 +18,22 @@ const initialState: accountState = {
 
 
 export const getACCforAddAsm1to6ListAsync = createAsyncThunk('other/get-list', async () => {
-    const response = await axios.get<[]>('http://localhost:5000/other/getforAddAsm1to6');
+    const response = await axios.get<[]>(API_URL+'other/getforAddAsm1to6');
     return response.data
 });
 
 export const getACCforAddAsm7ListAsync = createAsyncThunk('other/get-list', async () => {
-    const response = await axios.get<[]>('http://localhost:5000/other/getforAddAsm7');
+    const response = await axios.get<[]>(API_URL+'other/getforAddAsm7');
     return response.data
 });
 
 export const getACCforAddAsmStudentAsync = createAsyncThunk('other/get-list', async () => {
-    const response = await axios.get<[]>('http://localhost:5000/other/getforAddAsmStudent');
+    const response = await axios.get<[]>(API_URL+'other/getforAddAsmStudent');
     return response.data
 });
 
 export const getStudentForAddFeeCollectionAsync = createAsyncThunk("other/getStudentForAddFeeCollection", async (data:any) => {
-    const response = await axios.post<[]>(`http://localhost:5000/other/getStudentForAddFeeCollection`,data);
+    const response = await axios.post<[]>(`${API_URL}other/getStudentForAddFeeCollection`,data);
     return response.data;
   });
 

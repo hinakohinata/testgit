@@ -9,7 +9,7 @@
 // import { getRole, selectIsLoggedIn } from '@/redux/slices/userSlice';
 // import { useSelector } from 'react-redux';
 // import Header from '@/component/Header';
-// import { checkRole } from '../authen/checkRole';
+import { checkRole } from '../authen/checkRole';
 // import AccountAll from '@/component/AccountAll';
 
 // const RegisterPage = () => {
@@ -31,6 +31,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 export default function FileUploadForm() {
+      checkRole(1);
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +47,7 @@ export default function FileUploadForm() {
         }
         console.log("selectedFile",selectedFile)
         // Call your API endpoint to upload the file
-        fetch('http://localhost:5000/backupUpload/import-from-excel', {
+        fetch(API_URL+'backupUpload/import-from-excel', {
             method: 'POST',
             body: formData
         })

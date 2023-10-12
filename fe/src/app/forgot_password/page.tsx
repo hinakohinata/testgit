@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from "next/navigation"
 import { useAppDispatch } from '@/redux/hook';
 import { login, logout, setUser } from "@/redux/slices/userSlice";
-import {pushRouter} from './(Dashboard)/authen/pushRouter';
+import {pushRouter} from '../(Dashboard)/authen/pushRouter';
 
 export default function Home() {
   pushRouter();
@@ -17,7 +17,7 @@ export default function Home() {
   const handleLogin = async (e: any) => {
     e.preventDefault();
 
-    dispatch(login({ username, password }))
+    // dispatch(login({ username, password }))
 
   };
   return (
@@ -36,24 +36,24 @@ export default function Home() {
 
                 <form>
 
-                  <h3 className="fw-normal mb-3 pb-3" >Log in</h3>
+                  <h3 className="fw-normal mb-3 pb-3" >Forgot password</h3>
 
                   <div className="form-outline mb-4">
-                    <label className="form-label">Username</label>
+                    <label className="form-label">Email</label>
                     <input type="email" id="form2Example18" className="form-control form-control-lg" onChange={e => setUsername(e.target.value)} />
                   </div>
 
-                  <div className="form-outline mb-4">
+                  {/* <div className="form-outline mb-4">
                     <label className="form-label">Password</label>
                     <input type="password" id="form2Example28" className="form-control form-control-lg" onChange={e => setPassword(e.target.value)} />
-                  </div>
+                  </div> */}
 
                   <div className="pt-1 mb-4">
-                    <button className="btn btn-info btn-lg btn-block" onClick={handleLogin} >Login</button>
+                    <button className="btn btn-info btn-lg btn-block" onClick={handleLogin} >Send code</button>
                   </div>
 
-                  <p className="small mb-5 pb-lg-2"><a className="text-muted" href="/forgot_password">Forgot password?</a></p>
-                  {/* <p>Don't have an account? <a href="#!" className="link-info">Register here</a></p> */}
+                  {/* <p className="small mb-5 pb-lg-2"><a className="text-muted" href="/forgot_password">Forgot password?</a></p> */}
+                  <p>Remember password? <a href="/" className="link-info">Login here</a></p>
 
                 </form>
 

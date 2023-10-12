@@ -10,6 +10,8 @@ import Link from 'next/link';
 import { IconEdit } from '@tabler/icons-react';
 import { IconCaretRight } from '@tabler/icons-react';
 
+// import dotenv from 'dotenv';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const AccountStudent = () => {
     let stt = 0;
@@ -27,7 +29,7 @@ const AccountStudent = () => {
     useEffect(() => {
         dispatch(getAllStudentListAsync());
     }, []);
-    console.log("hello", assignments)
+    console.log("hello", API_URL)
     return (
 
         <PageContainer title="Dashboard" description="this is Dashboard">

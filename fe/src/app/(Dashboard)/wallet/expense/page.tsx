@@ -4,7 +4,10 @@ import { Typography, Grid, Box, Table, TableHead, TableRow, TableCell, Chip, Tab
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import PageContainer from '@/template/(DashboardLayout)/components/container/PageContainer';
-import { getExpenseList, getExpenseListAsync } from '@/redux/slices/expenseSlice';
+import { getExpenseList, getExpenseListAsync, resetExpenseList, searchExpenseAsync } from '@/redux/slices/expenseSlice';
+import Link from 'next/link';
+import { IconSettings } from '@tabler/icons-react';
+import { Icon360 } from '@tabler/icons-react';
 
 
 const UpdateAndDelAcc = () => {
@@ -20,7 +23,29 @@ const UpdateAndDelAcc = () => {
         },
     }));
     const assignments: any[] = useAppSelector(getExpenseList)
+    // const dispatch = useAppDispatch();
+    const typeName = useAppSelector((state) => state.expenseSlice.typeName);
+    const [date, setDate] = useState("");
+    const formatCurrency = (amount: number): string => {
+        return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    };
     const dispatch = useAppDispatch();
+    const formatDate = (dateString: string): string => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so we need to add 1
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+    const handleReset = () => {
+        dispatch(resetExpenseList());
+        setDate("");
+    };
+    const handleSearch = () => {
+        if (date) {
+            dispatch(searchExpenseAsync(date));
+        }
+    };
     useEffect(() => {
         dispatch(getExpenseListAsync());
     }, []);
@@ -31,27 +56,35 @@ const UpdateAndDelAcc = () => {
             <AppBarStyled position="sticky" color="default">
                 <Box>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} lg={8}>
+                        <Grid item xs={12} lg={4}>
                             <h3>Expense</h3>
                         </Grid>
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12} lg={8}>
                             <Stack spacing={1} direction="row" alignItems="center">
-                                <TextField />
-                                {/* <TextField
-                                    id="birthday"
+                                <TextField
+                                    sx={{ ml: 45 }}
                                     type="date"
-                                    required
-                                    value={selectedDate}
-                                    onChange={handleChange}
+                                    variant="outlined"
+                                    size="small"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
-                                /> */}
-                                <Button
-                                    variant="contained"
-                                    color="primary">
-                                    Add +
+                                />
+                                <Button sx={{ ml: 1 }} onClick={handleSearch} variant="contained" color="primary">
+                                    Tìm kiếm
                                 </Button>
+                                <Button sx={{ ml: 1 }} onClick={handleReset} variant="outlined">
+                                    <Icon360 />
+                                </Button>
+                                <Link href="/wallet/expense/add">
+                                    <Button
+                                        variant="contained"
+                                        color="primary">
+                                        Add +
+                                    </Button>
+                                </Link>
                             </Stack>
                         </Grid>
                     </Grid>
@@ -88,13 +121,18 @@ const UpdateAndDelAcc = () => {
                                     Date
                                 </Typography>
                             </TableCell>
+                            <TableCell>
+                                <Typography variant="subtitle2" fontWeight={600}>
+                                    Action
+                                </Typography>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {assignments.map((asm) => {
+                        {assignments.map((expense) => {
                             stt += 1;
                             return (
-                                <TableRow key={asm.id}>
+                                <TableRow key={expense.id}>
                                     <TableCell>
                                         <Typography
                                             sx={{
@@ -112,7 +150,7 @@ const UpdateAndDelAcc = () => {
                                                 fontWeight: "500",
                                             }}
                                         >
-                                            {asm.ftname}
+                                            {expense.ftname}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -124,7 +162,7 @@ const UpdateAndDelAcc = () => {
                                         >
                                             <Box>
                                                 <Typography variant="subtitle2" fontWeight={600}>
-                                                    {asm.amount}
+                                                    {formatCurrency(expense.amount)}
                                                 </Typography>
                                             </Box>
                                         </Box>
@@ -136,7 +174,7 @@ const UpdateAndDelAcc = () => {
                                                 fontWeight: "500",
                                             }}
                                         >
-                                            {asm.date}
+                                            {expense.date}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -146,7 +184,28 @@ const UpdateAndDelAcc = () => {
                                                 fontWeight: "500",
                                             }}
                                         >
-                                            {asm.rname}
+                                            {expense.rname}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography
+                                            sx={{
+                                                fontSize: "15px",
+                                                fontWeight: "500",
+                                            }}
+                                        >
+                                            <Link href={`/wallet/expense/${expense.id}`}>
+                                                <Chip
+                                                    sx={{
+                                                        px: "4px",
+                                                        backgroundColor: "secondary.main",
+                                                        color: "#fff",
+                                                    }}
+                                                    size="small"
+                                                    label={<IconSettings style={{ color: "#fff" }} />}
+                                                ></Chip>
+
+                                            </Link>
                                         </Typography>
                                     </TableCell>
                                 </TableRow>

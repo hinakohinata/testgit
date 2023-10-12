@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState, store } from "../store";
 import { toast } from 'react-toastify';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface evaluationState {
   evaluationList: any[];
@@ -17,12 +18,12 @@ const initialState: evaluationState = {
 };
 
 export const getevaluationListAsync = createAsyncThunk("evaluation/fetchcheckin", async () => {
-  const response = await axios.get<[]>("http://localhost:5000/evaluation");
+  const response = await axios.get<[]>(API_URL+"evaluation");
   return response.data;
 });
 
 export const getAttendanceBydateAsync = createAsyncThunk( 'evaluation/getCheckinByDate',async (date: any) => {
-    const response = await axios.post<any>('http://localhost:5000/evaluation/getByDate', {date});
+    const response = await axios.post<any>(API_URL+'evaluation/getByDate', {date});
     console.log("list",date,response.data)
     return response.data;
   }
@@ -32,7 +33,7 @@ export const getAttendanceBydateAsync = createAsyncThunk( 'evaluation/getCheckin
 export const updatePositionAsync = createAsyncThunk(
   'evaluation/update',
   async (updatedPosition: any) => {
-    const response = await axios.put<any>(`http://localhost:5000/evaluation/${updatedPosition.id}`, updatedPosition);
+    const response = await axios.put<any>(`${API_URL}evaluation/${updatedPosition.id}`, updatedPosition);
     return updatedPosition;
   }
 );
@@ -40,14 +41,14 @@ export const updatePositionAsync = createAsyncThunk(
 export const deletePositionAsync = createAsyncThunk(
   'evaluation/delete',
   async (positionId: number) => {
-    await axios.delete(`http://localhost:5000/evaluation/${positionId}`);
+    await axios.delete(`${API_URL}evaluation/${positionId}`);
     return positionId;
   }
 )
 export const searchPositionAsync = createAsyncThunk(
   'evaluation/search',
   async (text: string) => {
-    const response = await axios.get<[]>(`http://localhost:5000/evaluation/search/${text}`);
+    const response = await axios.get<[]>(`${API_URL}evaluation/search/${text}`);
     return response.data;
   }
 );

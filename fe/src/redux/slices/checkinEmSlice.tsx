@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState, store } from "../store";
 import { toast } from 'react-toastify';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface checkinEmState {
   CheckinEmList: any[];
@@ -17,18 +18,18 @@ const initialState: checkinEmState = {
 };
 
 export const getCheckinEmListAsync = createAsyncThunk("checkin/fetchcheckin", async () => {
-  const response = await axios.get<[]>("http://localhost:5000/checkin");
+  const response = await axios.get<[]>(API_URL+"checkin");
   return response.data;
 });
 
 export const CreateCheckinEmListAsync = createAsyncThunk("checkin/fetchCreateCheckin", async (data: any[]) => {
-  const response = await axios.post<any>('http://localhost:5000/checkin/createByDate', { data });
+  const response = await axios.post<any>(API_URL+'checkin/createByDate', { data });
   console.log("list", response.data)
   return response.data;
 });
 
 export const getCheckinBydateAsync = createAsyncThunk('checkin/getCheckinByDate', async (date: any) => {
-  const response = await axios.post<any>('http://localhost:5000/checkin/getByDate', { date });
+  const response = await axios.post<any>(API_URL+'checkin/getByDate', { date });
   console.log("list", date, response.data)
   return response.data;
 }
@@ -37,7 +38,7 @@ export const getCheckinBydateAsync = createAsyncThunk('checkin/getCheckinByDate'
 export const createCheckinEmAsync = createAsyncThunk(
   'checkin/create',
   async (positionData: any) => {
-    const response = await axios.post<any>('http://localhost:5000/checkin/createByDate', positionData);
+    const response = await axios.post<any>(API_URL+'checkin/createByDate', positionData);
     console.log(response)
     return response.data.name;
   }
@@ -46,7 +47,7 @@ export const createCheckinEmAsync = createAsyncThunk(
 export const updatePositionAsync = createAsyncThunk(
   'checkin/update',
   async (updatedPosition: any) => {
-    const response = await axios.put<any>(`http://localhost:5000/checkin/${updatedPosition.id}`, updatedPosition);
+    const response = await axios.put<any>(`${API_URL}checkin/${updatedPosition.id}`, updatedPosition);
     return updatedPosition;
   }
 );
@@ -54,7 +55,7 @@ export const updatePositionAsync = createAsyncThunk(
 export const setOffCheckinAsync = createAsyncThunk(
   'checkin/setOffCheckin',
   async (data: any) => {
-    const response = await axios.post<any>(`http://localhost:5000/checkin/setOff`, data);
+    const response = await axios.post<any>(`${API_URL}checkin/setOff`, data);
     return response.data;
   }
 );
@@ -62,7 +63,7 @@ export const setOffCheckinAsync = createAsyncThunk(
 export const setOnCheckinAsync = createAsyncThunk(
   'checkin/setOnCheckin',
   async (id: any) => {
-    const response = await axios.post<any>(`http://localhost:5000/checkin/setOn/${id}`);
+    const response = await axios.post<any>(`${API_URL}checkin/setOn/${id}`);
     return id;
   }
 );
@@ -70,14 +71,14 @@ export const setOnCheckinAsync = createAsyncThunk(
 export const deletePositionAsync = createAsyncThunk(
   'checkin/delete',
   async (positionId: number) => {
-    await axios.delete(`http://localhost:5000/checkin/${positionId}`);
+    await axios.delete(`${API_URL}checkin/${positionId}`);
     return positionId;
   }
 )
 export const searchPositionAsync = createAsyncThunk(
   'checkin/search',
   async (text: string) => {
-    const response = await axios.get<[]>(`http://localhost:5000/checkin/search/${text}`);
+    const response = await axios.get<[]>(`${API_URL}checkin/search/${text}`);
     return response.data;
   }
 );

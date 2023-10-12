@@ -20,6 +20,9 @@ const UpdateAndDelAcc = () => {
         },
     }));
     const assignments: any[] = useAppSelector(getfeeTypeList)
+    const formatCurrency = (amount: number): string => {
+        return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    };
     const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(getFeeTypeListAsync());
@@ -127,7 +130,7 @@ const UpdateAndDelAcc = () => {
                                             fontWeight: "500",
                                         }}
                                     >
-                                        {asm.amount}
+                                        {asm.amount!=null? formatCurrency(asm.amount):""}
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
