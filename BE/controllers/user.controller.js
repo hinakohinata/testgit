@@ -182,30 +182,20 @@ app.post('/', (req, res) => {
 })
 
 
-app.get('/getforAddAsm1to6', (req, res) => {
-  const sql = "SELECT u.user_id,u.name FROM user u "+
-  "LEFT JOIN assignment a ON u.user_id = a.user_id "+
-  "WHERE u.status = 1  AND a.user_id IS NULL "+
-  "AND u.position_id BETWEEN 1 AND 6;";
-  connection.query(sql, (error, result) => {
-      if (error)
-          res.status(500).send(error);
-      else {
-          res.json(result);
-      }
-  })
-})
-app.get('/getforAddAsm7', (req, res) => {
-  const sql = "SELECT u.user_id,u.name FROM user u "+
-  "LEFT JOIN assignment a ON u.user_id = a.user_id "+
-  "WHERE u.status = 1  AND a.user_id IS NULL "+
-  "AND u.position_id = 7;";
-  connection.query(sql, (error, result) => {
-      if (error)
-          res.status(500).send(error);
-      else {
-          res.json(result);
-      }
+
+app.post('/changePassword', (req, res) => {
+  // const id = req.body.id;
+  const user_id = req.body.identity_number;
+  const password = req.body.password;
+  const Epassword = req.body.Epassword;
+  const sql = "UPDATE `user` SET `password`=? WHERE `user_id`=?;";
+  if(password===Epassword)
+  connection.query(sql,[password,user_id], (error, result) => {
+    if (error)
+      res.status(500).send(error);
+    else {
+      res.json(result);
+    }
   })
 })
 
