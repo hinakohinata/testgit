@@ -185,13 +185,13 @@ app.post('/', (req, res) => {
 
 app.post('/changePassword', (req, res) => {
   // const id = req.body.id;
-  const user_id = req.body.identity_number;
+  const user_id = req.body.userId;
   const password = req.body.password;
-  const Epassword = req.body.Epassword;
+  let hasdPassword ;
   const sql = "UPDATE `user` SET `password`=? WHERE `user_id`=?;";
-  if (password === Epassword)
-    password = bcrypt.hash(password, 10)
-  connection.query(sql, [password, user_id], (error, result) => {
+  // if (password === Epassword)
+    hasdPassword = bcrypt.hash(password, 10)
+  connection.query(sql, [hasdPassword, user_id], (error, result) => {
     if (error)
       res.status(500).send(error);
     else {
