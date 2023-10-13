@@ -1,6 +1,7 @@
 const express = require('express');
 const connection = require('../config/db.config');
 const app = express();
+const nodemailer = require('nodemailer');
 const { Workbook } = require('exceljs');
 
 
@@ -277,9 +278,24 @@ app.get('/export-to-excel', async (req, res) => {
     }
 });
 
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'lamhtpk02207@fpt.edu.vn',
+      pass: 'pbqu ncjo lzmo ptpm'
+    }
+  });
+  app.post('/send1',(req,res)=>{
+    const number = req.body.number;
+    transporter.sendMail({
+      from: '"Fred Foo 👻" <foo@example.com>',
+      to: number,
+      subject: 'Hello ✔',
+      text: 'Hello world?',
+      html: '<b>Hello world?</b>'
+    });
 
-
-
+  })
 
 
 
