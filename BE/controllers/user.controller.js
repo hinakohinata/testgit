@@ -183,14 +183,16 @@ app.post('/', (req, res) => {
 
 
 
-app.post('/changePassword', (req, res) => {
+app.post('/changePassword', async (req, res) => {
   // const id = req.body.id;
   const user_id = req.body.userId;
   const password = req.body.password;
-  let hasdPassword ;
+  let hasdPassword;
   const sql = "UPDATE `user` SET `password`=? WHERE `user_id`=?;";
   // if (password === Epassword)
-    hasdPassword = bcrypt.hash(password, 10)
+  hasdPassword = await bcrypt.hash(password, 10)
+  console.log(password, hasdPassword)
+  res.json(hasdPassword)
   connection.query(sql, [hasdPassword, user_id], (error, result) => {
     if (error)
       res.status(500).send(error);
