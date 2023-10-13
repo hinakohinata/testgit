@@ -192,7 +192,7 @@ app.post('/changePassword', async (req, res) => {
   // if (password === Epassword)
   hasdPassword = await bcrypt.hash(password, 10)
   console.log(password, hasdPassword)
-  connection.query(sql, [hasdPassword, user_id], (error, result) => {
+  con.query(sql, [hasdPassword, user_id], (error, result) => {
     if (error)
       res.status(500).send(error);
     else {
