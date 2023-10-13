@@ -51,37 +51,12 @@ app.get('/export-to-excel', async (req, res) => {
         res.setHeader('Content-Disposition', 'attachment; filename=combined_tables.xlsx');
 
         await workbook.xlsx.write(res);
-        res.end();
-
+        // res.end();
+        console.log('Exporting data to Excel.')
     } catch (error) {
         res.status(500).send('Error exporting data to Excel.');
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -136,28 +111,15 @@ app.post('/import-from-excel', async (req, res) => {
 
             data.push(rowData);
         });
-        console.log(data,data.length);
         setSaveToDB(data);
+        console.log("importing data")
+        res.json("importing data")
     } catch (error) {
         console.error(error);
         res.status(500).send('Error importing data.');
     }
 });
 
-
-// // Hàm lưu dữ liệu vào CSDL
-// function saveToDB(tableName, fields, data) {
-//     console.log("tableName", tableName)
-//     console.log("fields", fields)
-//     console.log("data", data)
-//     // for (let item of data) {
-//     //     let fieldList = fields.join(',');
-//     //     let valueList = fields.map(field => `'${item[field]}'`).join(',');
-//     //     let sql = `INSERT INTO ${tableName} (${fieldList}) VALUES (${valueList})`;
-//     //     // Thực hiện câu lệnh SQL
-//     // }
-// }
-// Hàm lưu dữ liệu vào CSDL
 function setSaveToDB(data) {
     let tableName = "";
 let fields = [];
@@ -252,11 +214,11 @@ function saveToDB1(tableName, data) {
 
     connection.query(sql, (error, result) => {
         if (error) {
-            console.log(error)
-            // res.status(500).send(error);
+            // console.log(error)
+            res.status(500).send(error);
         }
         else {
-            console.log(result)
+            // console.log(result)
             // res.json(result);
         }
     })

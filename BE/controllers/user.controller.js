@@ -66,9 +66,9 @@ app.post('/getAllByRole/:role', (req, res) => {
 });
 
 app.post('/search/:name', (req, res) => {
-  let name='';
-  if(req.params.name.length>0)
-  name =  `WHERE u.name like '%${req.params.name}%'` 
+  let name = '';
+  if (req.params.name.length > 0)
+    name = `WHERE u.name like '%${req.params.name}%'`
   const sql = `SELECT  u.*, r.role1, r.role2, r.role3, r.role4, r.role5, r.role6, r.role7, r.role8 FROM user u INNER JOIN role_user r ON u.user_id = r.user_id ${name}`;
   con.query(sql, function (error, result) {
     if (error)
@@ -153,7 +153,7 @@ app.post('/', (req, res) => {
       + "VALUES (?,?,?,?,?,?,?,?,?,?,?,1);";
     con.query(sql, [user_id, name, birthday, address, phone, ethnic, identity_number, email, password, position_id, gender], function (error, result) {
       if (error) {
-        res.status(500).send(error); 
+        res.status(500).send(error);
         console.log(error);
       } else {
         const sql1 = ` INSERT INTO role_user(user_id,${role}) VALUES (?,'1');`;
@@ -166,7 +166,7 @@ app.post('/', (req, res) => {
               const sql2 = `UPDATE role_user SET role8='1' WHERE user_id= ?`;
               con.query(sql2, [user_id], function (error, result) {
                 if (error) {
-                  res.status(500).send(error); 
+                  res.status(500).send(error);
                   console.log(error);
                 };
               })
@@ -180,6 +180,7 @@ app.post('/', (req, res) => {
 
   }
 })
+
 
 
 
@@ -200,8 +201,6 @@ app.post('/changePassword', async (req, res) => {
     }
   })
 })
-
-
 
 
 

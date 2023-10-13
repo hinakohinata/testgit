@@ -9,17 +9,23 @@ const bcrypt = require('bcrypt');
 app.get('/getAll', (req, res) => {
   const sql = "SELECT  s.*,u.* FROM student s INNER JOIN user u ON u.user_id = s.user_id";
   con.query(sql, function (error, result) {
-    if (error)
-      res.status(500).send(error);
-    res.json(result);
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error getAll');
+  } else {
+      res.json(result);
+  }
   })
 });
 app.get('/getListStudent', (req, res) => {
   const sql = "SELECT  s.* FROM student s ";
   con.query(sql, function (error, result) {
-    if (error)
-      res.status(500).send(error);
-    res.json(result);
+    if (error) {
+            console.log(error);
+            res.status(500).send('Error getAll');
+        } else {
+            res.json(result);
+        }
   })
 });
 app.post('/getByID/:user_id', (req, res) => {
@@ -27,9 +33,12 @@ app.post('/getByID/:user_id', (req, res) => {
   const sql = "SELECT  u.*, r.role1, r.role2, r.role3, r.role4, r.role5, r.role6, r.role7, r.role8 FROM user u INNER JOIN"
     + " role_user r ON u.user_id = r.user_id WHERE u.user_id = ?";
   con.query(sql, [user_id], function (error, result) {
-    if (error)
-      res.status(500).send(error);
-    res.json(result);
+    if (error) {
+            console.log(error);
+            res.status(500).send('Error getAll');
+        } else {
+            res.json(result);
+        }
   })
 });
 
@@ -37,9 +46,12 @@ app.post('/getAllByRole/:role', (req, res) => {
   const role = `role` + req.params.role;
   const sql = `SELECT  u.*, r.role1, r.role2, r.role3, r.role4, r.role5, r.role6, r.role7, r.role8 FROM user u INNER JOIN role_user r ON u.user_id = r.user_id  WHERE r.${role} = 1`;
   con.query(sql, function (error, result) {
-    if (error)
-      res.status(500).send(error);
-    res.json(result);
+    if (error) {
+            console.log(error);
+            res.status(500).send('Error getAll');
+        } else {
+            res.json(result);
+        }
   })
 });
 app.post('/search/:name', (req, res) => {
@@ -48,9 +60,12 @@ app.post('/search/:name', (req, res) => {
   name =  `WHERE u.name like '%${req.params.name}%'` 
   const sql = `SELECT  u.*, r.role1, r.role2, r.role3, r.role4, r.role5, r.role6, r.role7, r.role8 FROM user u INNER JOIN role_user r ON u.user_id = r.user_id ${name}`;
   con.query(sql, function (error, result) {
-    if (error)
-      res.status(500).send(error);
-    res.json(result);
+    if (error) {
+            console.log(error);
+            res.status(500).send('Error getAll');
+        } else {
+            res.json(result);
+        }
   })
 });
 

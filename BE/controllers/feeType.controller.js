@@ -13,16 +13,19 @@ app.get('/', (req, res) => {
     })
 })
 app.get('/search/:text', (req, res) => {
-    const text =req.params.text;
-    const sql = "SELECT * FROM `fee_type` WHERE (`name` like ?) ";
-    con.query(sql,  ['%' + text + '%'],function (error, result) {
+    const text = req.params.text;
+    const sql = `SELECT * FROM fee_type WHERE name LIKE ?
+    `;
+    con.query(sql, ['%' + text + '%'], function (error, result) {
         if (error) {
             console.log(error);
             res.status(500).send(error);
-        } else
+        } else {
+            console.log("API Search Results:", result);
             res.json(result);
+        }
     })
-})
+});
 
 
 
