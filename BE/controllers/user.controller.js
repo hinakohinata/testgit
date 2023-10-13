@@ -189,8 +189,9 @@ app.post('/changePassword', (req, res) => {
   const password = req.body.password;
   const Epassword = req.body.Epassword;
   const sql = "UPDATE `user` SET `password`=? WHERE `user_id`=?;";
-  if(password===Epassword)
-  connection.query(sql,[password,user_id], (error, result) => {
+  if (password === Epassword)
+    password = bcrypt.hash(password, 10)
+  connection.query(sql, [password, user_id], (error, result) => {
     if (error)
       res.status(500).send(error);
     else {
