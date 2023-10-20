@@ -14,12 +14,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 var corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:3000/*"],
+  origin: ["http://localhost:3000", "http://localhost:3000/*","*"],
 };
 app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
+});
+
+app.listen(port, () => {
+  console.log(`Example ${port}`);
 });
 
 
@@ -51,7 +55,27 @@ const other = require("./controllers/other.controller");
 app.use("/other", other);
 const backupUpload = require("./controllers/backupUpload.controller");
 app.use("/backupUpload", backupUpload);
+const class_group = require("./controllers/class_group.controller");
+app.use("/classGroup", class_group);
+const salary = require("./controllers/salary.controller");
+app.use("/salary", salary);
 
-app.listen(port, () => {
-  console.log(`Example ${port}`);
-});
+
+// const room = require("./controllers/room.controller");
+// app.use("/room", room);
+// const class_group = require("./controllers/class_group.controller");
+// app.use("/classGroup", class_group);
+const User = require("./controllers/users.controller");
+app.use("/user", User);
+// const student = require("./controllers/student.controller");
+// app.use("/student", student);
+const health = require("./controllers/health.controller");
+app.use("/health", health);
+const prescription = require("./controllers/prescription.controller");
+app.use("/prescription", prescription);
+// const attendance = require("./controllers/attendance.controller");
+// app.use("/attendance", attendance);
+const menu = require("./controllers/menu.controller");
+app.use("/menu", menu);
+const notification = require("./controllers/notification.controller");
+app.use("/notification", notification);

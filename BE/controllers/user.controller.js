@@ -3,7 +3,6 @@ const con = require('../config/db.config');
 const app = express();
 const bcrypt = require('bcrypt');
 
-
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   let fetchedPassword;
@@ -33,7 +32,6 @@ app.post('/login', (req, res) => {
     });
   }
 });
-
 
 app.post('/getAll', (req, res) => {
   const sql = "SELECT  u.*, r.role1, r.role2, r.role3, r.role4, r.role5, r.role6, r.role7, r.role8 FROM user u INNER JOIN"
@@ -180,9 +178,6 @@ app.post('/', (req, res) => {
 
   }
 })
-
-
-
 
 app.post('/changePassword', async (req, res) => {
   // const id = req.body.id;

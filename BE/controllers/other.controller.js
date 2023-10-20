@@ -4,6 +4,13 @@ const app = express();
 const nodemailer = require('nodemailer');
 const { Workbook } = require('exceljs');
 
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'lamhtpk02207@fpt.edu.vn',
+      pass: 'pbqu ncjo lzmo ptpm'
+    }
+  });
 
 app.get('/getforAddAsm1to6', (req, res) => {
     const sql = "SELECT u.user_id,u.name, p.name as pname FROM user u " +
@@ -278,13 +285,6 @@ app.get('/export-to-excel', async (req, res) => {
     }
 });
 
-const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-      user: 'lamhtpk02207@fpt.edu.vn',
-      pass: 'pbqu ncjo lzmo ptpm'
-    }
-  });
   app.post('/send1',(req,res)=>{
     const number = req.body.number;
     transporter.sendMail({

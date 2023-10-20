@@ -28,150 +28,92 @@ app.get('/getListStudent', (req, res) => {
         }
   })
 });
-app.post('/getByID/:user_id', (req, res) => {
-  const user_id = req.params.user_id;
-  const sql = "SELECT  u.*, r.role1, r.role2, r.role3, r.role4, r.role5, r.role6, r.role7, r.role8 FROM user u INNER JOIN"
-    + " role_user r ON u.user_id = r.user_id WHERE u.user_id = ?";
-  con.query(sql, [user_id], function (error, result) {
-    if (error) {
-            console.log(error);
-            res.status(500).send('Error getAll');
-        } else {
-            res.json(result);
-        }
-  })
-});
 
-app.post('/getAllByRole/:role', (req, res) => {
-  const role = `role` + req.params.role;
-  const sql = `SELECT  u.*, r.role1, r.role2, r.role3, r.role4, r.role5, r.role6, r.role7, r.role8 FROM user u INNER JOIN role_user r ON u.user_id = r.user_id  WHERE r.${role} = 1`;
+// Get all students
+app.get("/", (req, res) => {
+  const sql = "SELECT * FROM `student`";
   con.query(sql, function (error, result) {
-    if (error) {
-            console.log(error);
-            res.status(500).send('Error getAll');
-        } else {
-            res.json(result);
-        }
-  })
-});
-app.post('/search/:name', (req, res) => {
-  let name='';
-  if(req.params.name.length>0)
-  name =  `WHERE u.name like '%${req.params.name}%'` 
-  const sql = `SELECT  u.*, r.role1, r.role2, r.role3, r.role4, r.role5, r.role6, r.role7, r.role8 FROM user u INNER JOIN role_user r ON u.user_id = r.user_id ${name}`;
-  con.query(sql, function (error, result) {
-    if (error) {
-            console.log(error);
-            res.status(500).send('Error getAll');
-        } else {
-            res.json(result);
-        }
-  })
-});
-
-
-app.put('/updateInfAccById/:userId', (req, res) => {
-  const user_id = req.params.userId;
-  const address = req.body.address;
-  const birthday = req.body.birthday;
-  const email = req.body.email;
-  const ethnic = req.body.ethnic;
-  const gender = req.body.gender.data[0];
-  const identity_number = req.body.identity_number;
-  const name = req.body.name;
-  const phone = req.body.phone;
-  const sql = `
-    UPDATE user SET 
-        name = ?, 
-        birthday = ?, 
-        address = ?, 
-        phone = ?, 
-        ethnic = ?, 
-        identity_number = ?, 
-        email = ?, 
-        gender = b'?'
-    WHERE user_id = ?;
-`;
-
-  con.query(sql, [name, birthday, address, phone, ethnic, identity_number, email, gender, user_id], function (error, results) {
-    if (error)
-      res.status(500).send(error);
-    res.json("oke");
-  });
-
-});
-app.put('/disableAccById/:userId', (req, res) => {
-  const user_id = req.params.userId;
-  const sql = `
-    UPDATE user SET 
-        status='0'
-    WHERE user_id = ?;
-`;
-
-  con.query(sql, [user_id], function (error, results) {
-    if (error)
-      res.status(500).send(error);
-    const sql = "SELECT  u.*, r.role1, r.role2, r.role3, r.role4, r.role5, r.role6, r.role7, r.role8 FROM user u INNER JOIN"
-      + " role_user r ON u.user_id = r.user_id";
-    con.query(sql, function (error, result) {
-      if (error)
-        res.status(500).send(error);
+      if (error) res.status(500).send(error);
       res.json(result);
-    })
   });
-
 });
 
+// Get a specific student by ID
+app.get("/:Id", (req, res) => {
+  const id = req.params.Id;
+  const sql = "SELECT * FROM `student` WHERE student_id = ?;";
+  con.query(sql, [id], function (error, result) {
+      if (error) res.status(500).send(error);
+      res.json(result);
+  });
+});
+
+// Get students by name
+app.get("/name/:name", (req, res) => {
+  const name = `%${req.params.name}%`;
+  const sql = "SELECT * FROM `student` WHERE name LIKE ?;";
+  con.query(sql, [name], function (error, result) {
+      if (error) res.status(500).send(error);
+      res.json(result);
+  });
+});
+
+// Add a new student
 app.post('/', (req, res) => {
-  // const id = req.body.id;
-  const user_id = req.body.identity_number;
-  const address = req.body.address;
-  const birthday = req.body.birthday;
-  const email = req.body.email;
-  const ethnic = req.body.ethnic;
-  const gender = req.body.gender;
-  const identity_number = req.body.identity_number;
-  const name = req.body.name;
-  const phone = req.body.phone;
-  const isParent = req.body.isParent;
-  const position_id = req.body.position_id;
-  const password = "$2a$10$pIDMA.7W/wi8b3EfURWjIe5OnkRpUpEnvMtHLSFmXtCjfR8u4qkD.";
-  const role = "role" + position_id;
+  const {
+      student_id, name, birthday, gender, address, ethnic, identity_number,
+      parent2_name, parent2_birth_year, parent2_hometown, student_hometown,
+      created_date, graduated_date, user_id,status
+  } = req.body;
+
   if (!name) {
-    res.status(500).send("Tên task trống!");
+      return res.status(400).send("Tên trống!");
   }
-  else {
-    const sql = " INSERT INTO `user`(`user_id`,`name`,`birthday`,`address`,`phone`,`ethnic`,`identity_number`,`email`,`password`,`position_id`,`gender`)"
-      + "VALUES (?,?,?,?,?,?,?,?,?,?,b'?');";
-    con.query(sql, [user_id, name, birthday, address, phone, ethnic, identity_number, email, password, position_id, gender], function (error, result) {
+
+  const sql = "INSERT INTO `student` (`student_id`, `name`, `birthday`, `gender`, `address`, `ethnic`, `identity_number`, `parent2_name`, `parent2_birth_year`, `parent2_hometown`, `student_hometown`, `created_date`, `graduated_date`, `user_id`,`status`) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+  con.query(sql, [student_id, name, birthday, gender, address, ethnic, identity_number, parent2_name, parent2_birth_year, parent2_hometown, student_hometown, created_date, graduated_date, user_id,status], function (error, result) {
       if (error) {
-        res.status(500).send(error); 
-        console.log(error);return;;
-      } else {
-        const sql1 = ` INSERT INTO role_user(user_id,${role}) VALUES (?,b'1');`;
-        con.query(sql1, [user_id], function (error, result) {
-          if (error) {
-            res.status(500).send(error);
-            console.log(error);return;;
-          } else {
-            if (isParent) {
-              const sql2 = `UPDATE role_user SET role8=b'1' WHERE user_id= ?`;
-              con.query(sql2, [user_id], function (error, result) {
-                if (error) {
-                  res.status(500).send(error); 
-                  console.log(error);return;
-                };
-              })
-            }
-
-          }
-        })
+          return res.status(500).send(error);
       }
-    })
+      return res.status(200).json({ ThongBao: 'Thành công' });
+  });
+});
 
+// Update a student
+app.put('/:Id', (req, res) => {
+  const student_id = req.params.Id;
+  const {
+      name, birthday, gender, address, ethnic, identity_number,
+      parent2_name, parent2_birth_year, parent2_hometown, student_hometown,
+      created_date, graduated_date, user_id, status
+  } = req.body;
 
+  if (!name) {
+      return res.status(400).send("Tên trống!");
   }
-})
+
+  const sql = "UPDATE `student` SET `name` = ?, `birthday` = ?, `gender` = ?, `address` = ?, `ethnic` = ?, `identity_number` = ?, `parent2_name` = ?, `parent2_birth_year` = ?, `parent2_hometown` = ?, `student_hometown` = ?, `created_date` = ?, `graduated_date` = ?, `user_id` = ?, `status` = ? WHERE (`student_id` = ?);";
+  con.query(sql, [name, birthday, gender, address, ethnic, identity_number, parent2_name, parent2_birth_year, parent2_hometown, student_hometown, created_date, graduated_date, user_id,status, student_id], function (error, result) {
+      if (error) {
+          return res.status(500).send(error);
+      }
+      
+      return res.status(200).json({ ThongBao: 'Cập nhật thành công' });
+  });
+});
+
+// Delete a student
+app.delete('/:Id', (req, res) => {
+  const student_id = req.params.Id;
+  const sql = "DELETE FROM `student` WHERE student_id = ?;";
+  con.query(sql, [student_id], function (error, result) {
+      if (error) {
+          return res.status(500).send(error);
+      }
+      return res.status(200).json({ ThongBao: 'Xóa thành công' });
+  });
+});
+
 
 
 
