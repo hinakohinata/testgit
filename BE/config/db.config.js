@@ -1,19 +1,19 @@
 //connect database
 require('dotenv').config();
 
-const mysql = require('mysql2')
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '123456',
-    database: 'new2',
-    port: 3306
-})
-connection.connect(function (arr) {
-    if (arr) throw arr;
-    console.log('connected db',process.env.POST);
-})
-module.exports = connection
+// const mysql = require('mysql2')
+// const connection = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '123456',
+//     database: 'new2',
+//     port: 3306
+// })
+// connection.connect(function (arr) {
+//     if (arr) throw arr;
+//     console.log('connected db',process.env.POST);
+// })
+// module.exports = connection
 
 
 
@@ -37,19 +37,19 @@ module.exports = connection
 // module.exports = pool.promise()
 
 
-// const mysql = require('mysql2');
+const mysql = require('mysql2');
 
-// const connection = mysql.createConnection({
-//     host: process.env.DB_HOST ,//|| 'localhost'
-//     user: process.env.DB_USERNAME ,//|| 'root'
-//     password: process.env.DB_PASSWORD ,// || '123456'
-//     database: process.env.DB_DBNAME ,// || 'new2'
-//     port: parseInt(process.env.DB_PORT) // ||3306
-// });
+const connection = mysql.createConnection({
+    host: process.env.DB_HOST || 'localhost',//
+    user: process.env.DB_USERNAME || 'root',//
+    password: process.env.DB_PASSWORD || '123456' ,//
+    database: process.env.DB_DBNAME  || 'new2',//
+    port: parseInt(process.env.DB_PORT)  ||3306//
+});
 
-// connection.connect(function(err) {
-//     if (err) throw err;
-//     console.log('connected to db on port', process.env.DB_PORT,' and db name ',process.env.DB_DBNAME);
-// });
+connection.connect(function(err) {
+    if (err) throw err;
+    console.log('connected to db on port', process.env.DB_PORT,' and db name ',process.env.DB_DBNAME);
+});
 
-// module.exports = connection;
+module.exports = connection;
